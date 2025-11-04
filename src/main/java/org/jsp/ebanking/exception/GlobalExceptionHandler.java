@@ -1,5 +1,22 @@
 package org.jsp.ebanking.exception;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.jsp.ebanking.dto.ErrorDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Object> handle(MethodArgumentNotValidException exception) {
+		List<String> errorMessages = exception.getFieldErrors().stream().map(x -> x.getDefaultMessage())
+				.collect(Collectors.toList());
+		return ResponseEntity.status(400).body(new ErrorDto(errorMessages));
+	}
 
 }

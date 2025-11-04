@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,8 +15,10 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain security(HttpSecurity httpSecurity) throws Exception {
-		return httpSecurity
-				.authorizeHttpRequests(x -> x.requestMatchers(swaggerPaths).permitAll().anyRequest().authenticated())
-				.formLogin(x -> x.disable()).httpBasic(x -> x.disable()).build();
+		return httpSecurity.csrf(x -> x.disable())
+				.authorizeHttpRequests(x -> x.requestMatchers("/api/v1/auth/**").permitAll()
+						.requestMatchers(swaggerPaths).permitAll().anyRequest().authenticated())
+				.formLogin(x -> x.disable()).httpBasic(x -> x.disable())
+				.sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 	}
 }
