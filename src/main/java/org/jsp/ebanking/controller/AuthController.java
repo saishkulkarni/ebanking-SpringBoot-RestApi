@@ -1,7 +1,7 @@
 package org.jsp.ebanking.controller;
 
+import org.jsp.ebanking.dto.ResponseDto;
 import org.jsp.ebanking.dto.UserDto;
-import org.jsp.ebanking.entity.TempUser;
 import org.jsp.ebanking.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +22,13 @@ public class AuthController {
 	private final UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<TempUser> register(@RequestBody @Valid UserDto dto) {
+	public ResponseEntity<ResponseDto> register(@RequestBody @Valid UserDto dto) {
 		return userService.register(dto);
 	}
 
-	@GetMapping("/verify/{email}")
-	public ResponseEntity<TempUser> fetch(@PathVariable String email) {
-		return userService.fetch(email);
+	@GetMapping("/check/{email}")
+	public String check(@PathVariable String email) {
+		return userService.check(email);
 	}
+
 }

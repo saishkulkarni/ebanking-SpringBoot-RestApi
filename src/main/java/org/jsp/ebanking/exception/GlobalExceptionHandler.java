@@ -19,4 +19,9 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(400).body(new ErrorDto(errorMessages));
 	}
 
+	@ExceptionHandler(DataExistsException.class)
+	public ResponseEntity<Object> handle(DataExistsException exception) {
+		return ResponseEntity.status(409).body(new ErrorDto(exception.getMessage()));
+	}
+
 }
