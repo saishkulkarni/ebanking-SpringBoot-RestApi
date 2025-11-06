@@ -26,4 +26,5 @@ public class SwaggerConfig {
 				.servers(List.of(new Server().url("http://localhost:8055").description("Local Development Server"),
 						new Server().url("https://api.ebanking.com").description("Production Server")));
 	}
+
 }

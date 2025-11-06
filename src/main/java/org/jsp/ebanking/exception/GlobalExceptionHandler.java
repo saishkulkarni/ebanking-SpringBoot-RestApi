@@ -24,4 +24,9 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(409).body(new ErrorDto(exception.getMessage()));
 	}
 
+	@ExceptionHandler(FailedToSendOtpException.class)
+	public ResponseEntity<Object> handle(FailedToSendOtpException exception) {
+		return ResponseEntity.status(500).body(new ErrorDto(exception.getMessage()));
+	}
+
 }

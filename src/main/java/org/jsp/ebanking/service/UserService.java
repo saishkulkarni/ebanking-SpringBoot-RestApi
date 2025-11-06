@@ -7,6 +7,4 @@ import org.springframework.http.ResponseEntity;
 public interface UserService {
 
 	ResponseEntity<ResponseDto> register(UserDto dto);
-
-	String check(String email);
 }
