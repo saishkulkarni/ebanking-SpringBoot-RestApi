@@ -29,4 +29,14 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(500).body(new ErrorDto(exception.getMessage()));
 	}
 
+	@ExceptionHandler(ExpiredException.class)
+	public ResponseEntity<Object> handle(ExpiredException exception) {
+		return ResponseEntity.status(408).body(new ErrorDto(exception.getMessage()));
+	}
+
+	@ExceptionHandler(MissMatchException.class)
+	public ResponseEntity<Object> handle(MissMatchException exception) {
+		return ResponseEntity.status(400).body(new ErrorDto(exception.getMessage()));
+	}
+
 }

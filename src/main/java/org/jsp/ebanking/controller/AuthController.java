@@ -1,5 +1,6 @@
 package org.jsp.ebanking.controller;
 
+import org.jsp.ebanking.dto.OtpDto;
 import org.jsp.ebanking.dto.ResponseDto;
 import org.jsp.ebanking.dto.UserDto;
 import org.jsp.ebanking.service.UserService;
@@ -22,6 +23,11 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<ResponseDto> register(@RequestBody @Valid UserDto dto) {
 		return userService.register(dto);
+	}
+
+	@PostMapping("/verify-otp")
+	public ResponseEntity<ResponseDto> verfiyOtp(@RequestBody OtpDto dto) {
+		return userService.verifyOtp(dto);
 	}
 
 }
