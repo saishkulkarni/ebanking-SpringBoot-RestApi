@@ -38,5 +38,10 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Object> handle(MissMatchException exception) {
 		return ResponseEntity.status(400).body(new ErrorDto(exception.getMessage()));
 	}
+	
+	@ExceptionHandler(DataNotFoundException.class)
+	public ResponseEntity<Object> handle(DataNotFoundException exception) {
+		return ResponseEntity.status(404).body(new ErrorDto(exception.getMessage()));
+	}
 
 }
