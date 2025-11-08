@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:${DB_URL}
+    username: ${DB_UN}
+    password: ${DB_PWD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls: 
+            enable: true
+server:
+  port: ${PORT}

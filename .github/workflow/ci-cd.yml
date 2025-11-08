@@ -1,0 +1,55 @@
+name: Build, Test, Dockerize, and Deploy eBanking App to Render (via API)
+
+on:
+  push:
+    branches:
+      - main  # Deploy only on main branch
+
+jobs:
+  build-test-docker-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and Test
+        run: mvn clean verify
+
+      - name: Log in to Docker registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login "${{ secrets.DOCKER_REGISTRY }}" -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ebanking:latest .
+          docker tag ebanking:latest "${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/ebanking:latest"
+
+      - name: Push Docker image
+        run: docker push "${{ secrets.DOCKER_REGISTRY }}/${{ secrets.DOCKER_USERNAME }}/ebanking:latest"
+
+      - name: Trigger Render Deploy via API
+        if: success()
+        env:
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          echo "Triggering Render deployment via API for service: $RENDER_SERVICE_ID"
+          curl -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}'
