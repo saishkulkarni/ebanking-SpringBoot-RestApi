@@ -9,7 +9,6 @@ pipeline {
     environment {
         DOCKER_REGISTRY = 'docker.io'
         DOCKER_IMAGE = 's13sh/ebanking:latest'
-        SCANNER_HOME = tool 'SonarScanner'
     }
 
     stages {
@@ -21,23 +20,15 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                bat 'mvn clean verify'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQubeLocal') {
-                    bat "\"%SCANNER_HOME%\\bin\\sonar-scanner\" -Dsonar.projectKey=ebanking -Dsonar.sources=src -Dsonar.java.binaries=target/classes"
-                }
+                sh 'mvn clean verify'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat 'docker build -t ebanking:latest .'
-                    bat "docker tag ebanking:latest ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
+                    sh "docker build -t ebanking:latest ."
+                    sh "docker tag ebanking:latest ${DOCKER_REGISTRY}/${DOCKER_IMAGE}"
                 }
             }
         }
@@ -45,9 +36,9 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat """
-                    echo %DOCKER_PASS% | docker login %DOCKER_REGISTRY% -u %DOCKER_USER% --password-stdin
-                    docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}
+                    sh """
+                        echo $DOCKER_PASS | docker login $DOCKER_REGISTRY -u $DOCKER_USER --password-stdin
+                        docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}
                     """
                 }
             }
@@ -59,13 +50,13 @@ pipeline {
                     string(credentialsId: 'render-api-key', variable: 'RENDER_API_KEY'),
                     string(credentialsId: 'render-service-id', variable: 'RENDER_SERVICE_ID')
                 ]) {
-                    bat """
-                    echo Triggering Render deployment via API for service: %RENDER_SERVICE_ID%
-                    curl -X POST "https://api.render.com/v1/services/%RENDER_SERVICE_ID%/deploys" ^
-                        -H "Accept: application/json" ^
-                        -H "Authorization: Bearer %RENDER_API_KEY%" ^
-                        -H "Content-Type: application/json" ^
-                        -d "{}"
+                    sh """
+                        echo "Triggering Render deployment via API for service: $RENDER_SERVICE_ID"
+                        curl -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
+                        -H "Accept: application/json" \
+                        -H "Authorization: Bearer $RENDER_API_KEY" \
+                        -H "Content-Type: application/json" \
+                        -d '{}'
                     """
                 }
             }
@@ -74,7 +65,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build, Sonar analysis, and deployment successful!'
+            echo '✅ Deployment triggered successfully!'
         }
         failure {
             echo '❌ Build or deploy failed!'
