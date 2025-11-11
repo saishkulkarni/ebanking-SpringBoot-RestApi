@@ -1,5 +1,6 @@
 package org.jsp.ebanking.controller;
 
+import org.jsp.ebanking.dto.LoginDto;
 import org.jsp.ebanking.dto.OtpDto;
 import org.jsp.ebanking.dto.ResetPasswordDto;
 import org.jsp.ebanking.dto.ResponseDto;
@@ -46,6 +47,11 @@ public class AuthController {
 	@PatchMapping("/reset-password")
 	public ResponseEntity<ResponseDto> resetPassword(@RequestBody @Valid ResetPasswordDto dto) {
 		return userService.resetPassword(dto);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<ResponseDto> login(@RequestBody @Valid LoginDto dto) {
+		return userService.login(dto);
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.jsp.ebanking.service;
 
+import org.jsp.ebanking.dto.LoginDto;
 import org.jsp.ebanking.dto.OtpDto;
 import org.jsp.ebanking.dto.ResetPasswordDto;
 import org.jsp.ebanking.dto.ResponseDto;
@@ -17,5 +18,7 @@ public interface UserService {
 	ResponseEntity<ResponseDto> forgotPassword(String email);
 
 	ResponseEntity<ResponseDto> resetPassword(ResetPasswordDto dto);
+
+	ResponseEntity<ResponseDto> login(LoginDto dto);
 
 }

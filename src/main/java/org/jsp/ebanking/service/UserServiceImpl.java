@@ -3,6 +3,7 @@ package org.jsp.ebanking.service;
 import java.security.SecureRandom;
 
 import org.jsp.ebanking.dto.BankingRole;
+import org.jsp.ebanking.dto.LoginDto;
 import org.jsp.ebanking.dto.OtpDto;
 import org.jsp.ebanking.dto.ResetPasswordDto;
 import org.jsp.ebanking.dto.ResponseDto;
@@ -13,8 +14,13 @@ import org.jsp.ebanking.exception.DataNotFoundException;
 import org.jsp.ebanking.exception.ExpiredException;
 import org.jsp.ebanking.exception.MissMatchException;
 import org.jsp.ebanking.repository.UserRepository;
+import org.jsp.ebanking.util.JwtUtil;
 import org.jsp.ebanking.util.MessageSendingHelper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +34,9 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final MessageSendingHelper messageSendingHelper;
 	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
+	private final JwtUtil jwtUtil;
+	private final UserDetailsService userDetailsService;
 
 	@Override
 	public ResponseEntity<ResponseDto> register(UserDto dto) {
@@ -114,6 +123,14 @@ public class UserServiceImpl implements UserService {
 				}
 			}
 		}
+	}
+
+	@Override
+	public ResponseEntity<ResponseDto> login(LoginDto dto) {
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword()));
+		UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
+		String token = jwtUtil.generateToken(userDetails);
+		return ResponseEntity.ok(new ResponseDto("Login Success", token));
 	}
 
 }

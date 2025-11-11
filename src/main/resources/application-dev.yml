@@ -24,3 +24,5 @@ spring:
             enable: true
 server:
   port: ${PORT}
+jwt:
+  secret: ${JWT_KEY}
