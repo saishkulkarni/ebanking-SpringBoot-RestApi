@@ -11,6 +11,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
@@ -32,7 +34,12 @@ public class SwaggerConfig {
 						.license(new License().name("Apache 2.0")
 								.url("https://www.apache.org/licenses/LICENSE-2.0.html")))
 				.servers(List.of(new Server().url("http://localhost:8055").description("Local Development Server"),
-						new Server().url("https://api.ebanking.com").description("Production Server")));
+						new Server().url("https://api.ebanking.com").description("Production Server")))
+				.addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+				.components(new io.swagger.v3.oas.models.Components().addSecuritySchemes("bearerAuth",
+						new SecurityScheme().name("Authorization").type(SecurityScheme.Type.HTTP).scheme("bearer")
+								.bearerFormat("JWT")
+								.description("Enter JWT Bearer token in the format **&lt;token&gt;**")));
 	}
 
 }
