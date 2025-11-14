@@ -152,9 +152,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<ResponseDto> createSavingsAccount(Principal principal, SavingAccountDto accountDto) {
 		User user = getLoggedInUser(principal);
-		if (user.getBankAccount() != null)
-			throw new DataExistsException("Account Already Exists and You can not new Create One");
-		else {
+		if (user.getBankAccount() != null) {
+			if (user.getBankAccount().isActive())
+				throw new DataExistsException("Account Already Exists and You can not new Create One");
+			else
+				throw new DataExistsException("Account Still Pending for Verification Wait for some time");
+
+		} else {
 			SavingBankAccount bankAccount = new SavingBankAccount(null, accountDto.getAddress(), "EBNK000001",
 					accountDto.getFullName(), accountDto.getPan(), accountDto.getAadhar(), "EBANK-DEFAULT", 0.0, false,
 					false);
