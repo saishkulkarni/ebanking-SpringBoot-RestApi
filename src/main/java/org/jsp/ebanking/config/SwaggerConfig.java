@@ -2,6 +2,7 @@ package org.jsp.ebanking.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,9 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 @Controller
 public class SwaggerConfig {
+	
+	@Value("${server.port}")
+	private int port;
 
 	@GetMapping("/")
 	public String loadSwagger() {
@@ -33,7 +37,7 @@ public class SwaggerConfig {
 								.url("https://www.ebanking.com"))
 						.license(new License().name("Apache 2.0")
 								.url("https://www.apache.org/licenses/LICENSE-2.0.html")))
-				.servers(List.of(new Server().url("http://localhost:8055").description("Local Development Server"),
+				.servers(List.of(new Server().url("http://localhost:"+port+"").description("Local Development Server"),
 						new Server().url("https://ebanking-x7l5.onrender.com/").description("Production Server")))
 				.addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
 				.components(new io.swagger.v3.oas.models.Components().addSecuritySchemes("bearerAuth",

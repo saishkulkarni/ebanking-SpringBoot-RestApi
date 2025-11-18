@@ -6,6 +6,7 @@ import org.jsp.ebanking.dto.ResponseDto;
 import org.jsp.ebanking.entity.SavingBankAccount;
 import org.jsp.ebanking.entity.User;
 import org.jsp.ebanking.exception.DataNotFoundException;
+import org.jsp.ebanking.mapper.UserMapper;
 import org.jsp.ebanking.repository.SavingAccountRepository;
 import org.jsp.ebanking.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class AdminServiceImpl implements AdminService {
 
 	private final SavingAccountRepository savingAccountRepository;
 	private final UserRepository userRepository;
+	private final UserMapper userMapper;
 
 	@Override
 	public ResponseEntity<ResponseDto> getPendingAccounts() {
@@ -34,7 +36,7 @@ public class AdminServiceImpl implements AdminService {
 	public ResponseEntity<ResponseDto> getUser(Long accountNumber) {
 		User user = userRepository.findByBankAccount_accountNumber(accountNumber)
 				.orElseThrow(() -> new DataNotFoundException("No User Details Found"));
-		return ResponseEntity.ok(new ResponseDto("User Details Found", user));
+		return ResponseEntity.ok(new ResponseDto("User Details Found", userMapper.toDto(user)));
 	}
 
 	@Override
@@ -43,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
 				.orElseThrow(() -> new DataNotFoundException("No Account Details Found"));
 		account.setActive(true);
 		savingAccountRepository.save(account);
-		return ResponseEntity.ok(new ResponseDto("Status Updated Success", account));
+		return ResponseEntity.ok(new ResponseDto("Account Approved Success", account));
 	}
 
 }

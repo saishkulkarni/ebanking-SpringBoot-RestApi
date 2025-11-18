@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,7 +29,7 @@ public class UserController {
 
 	@PostMapping("/account/bank")
 	public ResponseEntity<ResponseDto> createSavingsAccount(Principal principal,
-			@RequestBody SavingAccountDto accountDto) {
+			@RequestBody @Valid SavingAccountDto accountDto) {
 		return userService.createSavingsAccount(principal, accountDto);
 	}
 

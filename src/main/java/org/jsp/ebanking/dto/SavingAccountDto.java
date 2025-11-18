@@ -13,5 +13,5 @@ public class SavingAccountDto {
 	@Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",message = "Enter Proper PAN Number")
 	private String pan;
 	@Pattern(regexp = "^[2-9]{1}[0-9]{11}$",message = "Enter Proper Aadhar Number")
-	private Long aadhar;
+	private String aadhar;
 }
