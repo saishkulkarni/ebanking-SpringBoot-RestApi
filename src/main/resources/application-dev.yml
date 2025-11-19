@@ -26,3 +26,6 @@ server:
   port: ${PORT}
 jwt:
   secret: ${JWT_KEY}
+razorpay:
+  key: ${RZRPY_KEY}
+  secret: ${RZRPY_SECRET}

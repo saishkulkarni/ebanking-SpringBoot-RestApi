@@ -1,5 +1,17 @@
-{"properties": [{
-  "name": "jwt.secret",
-  "type": "java.lang.String",
-  "description": "A description for 'jwt.secret'"
-}]}
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret'"
+  },
+  {
+    "name": "razorpay.key",
+    "type": "java.lang.String",
+    "description": "A description for 'razorpay.key'"
+  },
+  {
+    "name": "razorpay.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'razorpay.secret'"
+  }
+]}
