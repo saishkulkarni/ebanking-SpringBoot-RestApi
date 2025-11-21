@@ -53,7 +53,7 @@ public class UserController {
 		return userService.confirmPayment(amount, razorpay_payment_id, principal);
 	}
 
-	@PostMapping("/transafer")
+	@PostMapping("/transfer")
 	public ResponseEntity<ResponseDto> transferAmount(Principal principal,@RequestBody TransferDto dto) {
 		return userService.transfer(principal,dto);
 	}

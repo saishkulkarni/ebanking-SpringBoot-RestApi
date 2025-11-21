@@ -22,9 +22,10 @@ public class MessageSendingHelper {
 
 	@Async
 	public void sendOtp(String name, String email, int otp) {
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
 		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message);
+
 			helper.setTo(email);
 			helper.setFrom("ebanking@help.com", "eBanking");
 			helper.setSubject("Otp to Create Account at ebanking");
@@ -68,18 +69,19 @@ public class MessageSendingHelper {
 			helper.setText(htmlMsg, true);
 
 			mailSender.send(message);
-			log.info("OTP SENT SUCCESS");
+			log.info("OTP SENT SUCCESS "+otp);
 		} catch (MessagingException | UnsupportedEncodingException e) {
-			log.error("FAILED TO SEND OTP");
+			log.error("FAILED TO SEND OTP ");
 			throw new FailedToSendOtpException("Sorry there is isuue on our side will fix ASAP, Try After Sometime");
 		}
 	}
 
 	@Async
 	public void sendForgotPasswordOtp(String email, int otp) {
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
 		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message);
+
 			helper.setTo(email);
 			helper.setFrom("ebanking@help.com", "eBanking");
 			helper.setSubject("Otp for Reseting the Password");
@@ -91,7 +93,7 @@ public class MessageSendingHelper {
 			helper.setText(htmlMsg, true);
 
 			mailSender.send(message);
-			log.info("OTP SENT SUCCESS");
+			log.info("OTP SENT SUCCESS "+otp);
 		} catch (MessagingException | UnsupportedEncodingException e) {
 			log.error("FAILED TO SEND OTP");
 			throw new FailedToSendOtpException("Sorry there is isuue on our side will fix ASAP, Try After Sometime");

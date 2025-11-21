@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseDto> resendOtp(String email) {
-		if (redisService.fetchOtp(email) == 0)
+		if (redisService.fetchUserDto(email) == null)
 			throw new DataNotFoundException(email + " doesnt exist");
 		else {
 			int otp = new SecureRandom().nextInt(1000, 10000);
@@ -190,8 +190,8 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<ResponseDto> checkBalance(Principal principal) {
 		User user = getLoggedInUser(principal);
 		SavingBankAccount account = user.getBankAccount();
-		if (account == null)
-			throw new DataNotFoundException("No Bank Accounts FOund Linked with This User account");
+		if (account == null || !account.isActive())
+			throw new DataNotFoundException("No Bank Accounts Found Linked with This User account");
 		else {
 			return ResponseEntity.ok(new ResponseDto("Account Found",
 					new BankBalanceDto(account.getAccountNumber(), account.getBalance())));
@@ -241,6 +241,8 @@ public class UserServiceImpl implements UserService {
 		if (fromAccount == null)
 			throw new DataNotFoundException("No Bank Accounts Found Linked with This User account");
 		else {
+			if (fromAccount.getAccountNumber() == toAccount.getAccountNumber())
+				throw new MissMatchException("To account Number Can not be Same as From");
 			if (!fromAccount.isActive() || fromAccount.isBlocked() || toAccount.isBlocked() || !toAccount.isActive())
 				throw new PaymentFailedException("Account is Not Active or Blocked Contact Admin");
 			else {
