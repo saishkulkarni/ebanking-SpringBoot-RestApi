@@ -1,0 +1,92 @@
+
+E-Banking Full-Stack Project Summary
+====================================
+
+1. How to add this project in your resume
+-----------------------------------------
+
+Project: E-Banking System (Spring Boot + React + JWT + Razorpay)
+
+- Developed a secure end-to-end online banking application using Spring Boot, React.js, and JWT authentication.
+- Implemented role-based access control (Admin/User) with Spring Security and JWT.
+- Built REST APIs for user registration, login, OTP verification, password reset, bank account management, and transactions.
+- Integrated Razorpay payment gateway for deposits, including order creation and payment verification.
+- Designed a responsive dark-mode UI using React, Bootstrap Dark, React Router, and Axios.
+- Built an admin module for approving accounts, viewing users, blocking/unblocking accounts, and checking transactions.
+- Implemented OTP verification, email sending, Redis-based temporary storage, and DTO validation.
+- Applied clean layered architecture with controllers, services, mappers, exception handlers, and filters.
+
+
+2. Interview Explanation Guide (How to explain this project)
+------------------------------------------------------------
+
+Project Name: E-Banking System
+Tech Stack: Spring Boot, Spring Security (JWT), React.js, Razorpay, Redis, MySQL, REST API, Axios, Bootstrap Dark
+
+Short Description (For Interview)
+---------------------------------
+“This is a full-stack online banking system where users can register, verify OTP, log in, and manage their bank accounts. 
+Users can deposit money using Razorpay, transfer funds, check balances, and view transactions. 
+Admins can approve new accounts, view users, block/unblock accounts, and view transactions. 
+The backend is built with Spring Boot + JWT, and the frontend is a modern React UI.”
+
+Deep Explanation (2–3 Minutes)
+------------------------------
+
+1. Authentication & Security
+- Implemented stateless authentication using Spring Security + JWT.
+- Created a custom JWT filter for validating tokens on every request.
+- Implemented password hashing, validation, and role-based access control.
+- Used custom exception handlers for a clean API experience.
+
+2. User Onboarding & OTP Flow
+- On registration, user data and OTP are stored temporarily in Redis.
+- OTP is sent via email, user must verify before creating the account.
+- Ensures security and prevents duplicate registrations.
+
+3. Bank Account Module
+- Users can create a savings account with full validation (name, PAN, Aadhar, address).
+- Accounts remain inactive until approved by an Admin.
+- Admin can approve, block, or unblock any account.
+
+4. Razorpay Deposit Integration
+- Backend creates Razorpay orders using the Razorpay SDK.
+- React opens Razorpay checkout for payment.
+- On success, backend verifies payment and creates a transaction entry.
+- Updates balance and transaction history.
+
+5. Transactions & Balance
+- Every deposit/transfer creates a BankTransaction record.
+- Tracks previous balance, new balance, amount, type (credit/debit), timestamp.
+- Users can check balance, transfer funds, and view transaction history.
+
+6. Admin Dashboard
+- View all users
+- View pending accounts
+- Approve accounts
+- Block/unblock accounts
+- View bank account details
+- View all transactions
+
+7. Frontend Architecture
+- Built with React + React Router + Axios.
+- Fully responsive modern dark-mode UI.
+- Toast notifications for realtime feedback.
+- Token interceptor included in Axios.
+- Clean component structure.
+
+Common Interview Questions & Answers
+------------------------------------
+
+1. What challenges did you face?
+- Razorpay payment signature verification.
+- Integrating JWT with role-based access control.
+- Designing a scalable admin + user architecture.
+- Managing nested transaction data in React.
+
+2. What did you learn?
+- How full-stack applications work end to end.
+- JWT authentication flow.
+- Razorpay integration.
+- React routing and state management.
+- Secure exception handling.

@@ -159,8 +159,10 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<ResponseDto> viewSavingsAccount(Principal principal) {
 		User user = getLoggedInUser(principal);
 		SavingBankAccount bankAccount = user.getBankAccount();
-		if (bankAccount == null || !bankAccount.isActive())
+		if (bankAccount == null)
 			throw new DataNotFoundException("No Bank Account Exists for " + user.getName());
+		if (!bankAccount.isActive())
+			throw new DataExistsException("Waiting for Admins Approval");
 		else {
 			return ResponseEntity.ok(new ResponseDto("Account Found", bankAccount));
 		}
